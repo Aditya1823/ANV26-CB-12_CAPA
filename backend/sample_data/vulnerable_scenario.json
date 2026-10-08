@@ -1,0 +1,41 @@
+{
+  "resources": [
+    {
+      "id": "api",
+      "type": "API",
+      "internet_exposed": true
+    },
+    {
+      "id": "server",
+      "type": "SERVER"
+    },
+    {
+      "id": "iam",
+      "type": "IAM_ROLE",
+      "excessive_permission": true
+    },
+    {
+      "id": "database",
+      "type": "DATABASE",
+      "critical": true
+    }
+  ],
+  "connections": [
+    {
+      "from": "api",
+      "to": "server",
+      "type": "network"
+    },
+    {
+      "from": "server",
+      "to": "iam",
+      "type": "trust"
+    },
+    {
+      "from": "iam",
+      "to": "database",
+      "type": "permission",
+      "permission": "READ_WRITE"
+    }
+  ]
+}
