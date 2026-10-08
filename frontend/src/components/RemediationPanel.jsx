@@ -531,6 +531,11 @@ export default function RemediationPanel({
 
           <div className="best-strategy">
 
+            <div className="what-if-heading">
+              <span className="eyebrow">WHAT-IF SIMULATOR</span>
+              <p>Test the recommended remediation safely before applying it.</p>
+            </div>
+
             <div className="best-strategy-top">
 
               <div>

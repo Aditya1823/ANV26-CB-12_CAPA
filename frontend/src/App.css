@@ -2965,3 +2965,23 @@ input[type="file"]::file-selector-button:hover {
   border-radius: 4px !important;
 }
 
+
+.what-if-heading {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-left: 2px solid #3b82f6;
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.what-if-heading .eyebrow {
+  color: #60a5fa;
+  letter-spacing: 0.12em;
+}
+
+.what-if-heading p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
