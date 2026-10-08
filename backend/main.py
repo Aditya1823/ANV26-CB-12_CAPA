@@ -16,6 +16,7 @@ from optimizer import optimize_remediations
 from persona_engine import rank_paths_by_persona
 from what_if import simulate_remediation
 from alternate_paths import find_alternate_paths
+from security.api_routes import router as security_router
 from what_if import simulate_remediation_set
 
 
@@ -37,6 +38,7 @@ app = FastAPI(
 # CORS
 # ============================================================
 
+app.include_router(security_router)
 app.add_middleware(
     CORSMiddleware,
 
