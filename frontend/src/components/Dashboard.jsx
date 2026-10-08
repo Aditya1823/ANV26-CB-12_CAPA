@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import AttackGraph from "./AttackGraph";
 import RiskPanel from "./RiskPanel";
 import RemediationPanel from "./RemediationPanel";
 import PersonaPanel from "./PersonaPanel";
+import FindingsPanel from "./FindingsPanel";
 
 const API_BASE = "http://127.0.0.1:8000";
 
@@ -130,6 +131,14 @@ export default function Dashboard() {
   const [selectedScenario, setSelectedScenario] =
     useState("singlePath");
 
+  const [uploadedConfiguration, setUploadedConfiguration] =
+    useState(null);
+
+  const [uploadedFileName, setUploadedFileName] =
+    useState("");
+
+  const fileInputRef = useRef(null);
+
   const [analysis, setAnalysis] =
     useState(null);
 
@@ -150,6 +159,10 @@ export default function Dashboard() {
 
   const scenario =
     scenarios[selectedScenario];
+
+  const activeConfiguration =
+    uploadedConfiguration ||
+    scenario.configuration;
 
   const analyzeConfiguration = async () => {
     try {
@@ -172,7 +185,7 @@ export default function Dashboard() {
 
           body: JSON.stringify({
             configuration:
-              scenario.configuration,
+              activeConfiguration,
           }),
         }
       );
@@ -195,6 +208,117 @@ export default function Dashboard() {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    // Reset the native file input so another file can be selected
+    // immediately, including the same file again.
+    if (event.target) {
+      event.target.value = "";
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      setSimulation(null);
+      setSelectedRemediation(null);
+
+      const response = await fetch(
+        `${API_BASE}/security/analyze-file`,
+        {
+          method: "POST",
+          body: (() => {
+            const formData = new FormData();
+            formData.append("file", file);
+            return formData;
+          })(),
+        }
+      );
+
+      if (!response.ok) {
+        let detail = "";
+        try {
+          const errorData = await response.json();
+          detail = errorData.detail || JSON.stringify(errorData);
+        } catch {
+          detail = await response.text();
+        }
+        throw new Error(
+          `File analysis failed (${response.status}): ${detail}`
+        );
+      }
+
+      const data = await response.json();
+
+      if (!data.configuration) {
+        throw new Error(
+          "Uploaded file is not a valid CloudShield configuration"
+        );
+      }
+
+      setUploadedConfiguration(data.configuration);
+      setUploadedFileName(file.name);
+
+      const analyzeResponse = await fetch(
+        `${API_BASE}/analyze`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            configuration: data.configuration,
+          }),
+        }
+      );
+
+      if (!analyzeResponse.ok) {
+        throw new Error("CloudShield analysis failed");
+      }
+
+      const analysisData =
+        await analyzeResponse.json();
+
+      setAnalysis({
+        ...analysisData,
+        findings:
+          data.findings ||
+          analysisData.findings ||
+          [],
+        findings_summary:
+          data.findings_summary ||
+          analysisData.findings_summary ||
+          data.summary ||
+          {},
+      });
+    } catch (err) {
+      console.error(err);
+      setError(
+        err.message ||
+        "Unable to analyze uploaded configuration."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearUploadedConfiguration = () => {
+    setUploadedConfiguration(null);
+    setUploadedFileName("");
+    setAnalysis(null);
+    setSimulation(null);
+    setSelectedRemediation(null);
+    setError("");
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -221,7 +345,7 @@ export default function Dashboard() {
 
           body: JSON.stringify({
             configuration:
-              scenario.configuration,
+              activeConfiguration,
 
             remediation,
           }),
@@ -294,10 +418,9 @@ export default function Dashboard() {
 
           body: JSON.stringify({
             configuration:
-              scenario.configuration,
+              activeConfiguration,
 
-            remediations:
-              remediationSet,
+            remediations: remediationSet,
           }),
         }
       );
@@ -348,8 +471,10 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    analyzeConfiguration();
-  }, [selectedScenario]);
+    if (!uploadedConfiguration) {
+      analyzeConfiguration();
+    }
+  }, [selectedScenario, uploadedConfiguration]);
 
   const attackPaths =
     analysis?.attack_paths || [];
@@ -418,13 +543,22 @@ export default function Dashboard() {
     );
   }, [primaryAttackPath]);
 
-  const summary =
+  const baseSummary =
     analysis?.summary || {
       total_resources: 0,
       critical_assets: 0,
       dangerous_paths: 0,
       highest_risk: 0,
     };
+
+  const summary = simulation
+    ? {
+        ...baseSummary,
+        dangerous_paths: simulation.remaining_paths?.length || 0,
+        highest_risk:
+          simulation.after?.risk_score ?? baseSummary.highest_risk,
+      }
+    : baseSummary;
 
   const optimizedRemediations =
     analysis?.optimized_remediations ||
@@ -464,11 +598,15 @@ export default function Dashboard() {
           <select
             id="scenario"
             value={selectedScenario}
-            onChange={(event) =>
-              setSelectedScenario(
-                event.target.value
-              )
-            }
+            
+            onChange={(event) => {
+              setSelectedScenario(event.target.value);
+              setUploadedConfiguration(null);
+              setUploadedFileName("");
+              setAnalysis(null);
+              setSimulation(null);
+              setSelectedRemediation(null);
+            }}
           >
             {Object.entries(
               scenarios
@@ -490,6 +628,88 @@ export default function Dashboard() {
 
         </div>
 
+      </div>
+
+      <div
+        className="panel"
+        style={{
+          marginTop: "24px",
+          marginBottom: "24px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "20px",
+            flexWrap: "wrap",
+          }}
+        >
+          <div>
+            <span className="eyebrow">
+              REAL CONFIGURATION ANALYSIS
+            </span>
+
+            <h2>
+              Upload Cloud Configuration
+            </h2>
+
+            <p
+              style={{
+                marginTop: "6px",
+                opacity: 0.7,
+              }}
+            >
+              Upload a JSON or YAML configuration for full CloudShield analysis.
+            </p>
+
+            {uploadedFileName && (
+              <p
+                style={{
+                  marginTop: "8px",
+                  opacity: 0.85,
+                }}
+              >
+                Loaded: <strong>{uploadedFileName}</strong>
+              </p>
+            )}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              alignItems: "center",
+            }}
+          >
+            <label
+              className="secondary-action"
+              style={{
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+              }}
+            >
+              Choose JSON/YAML
+              <input
+                type="file"
+                accept=".json,.yaml,.yml"
+                onChange={handleFileUpload}
+                style={{ display: "none" }}
+              />
+            </label>
+
+            {uploadedConfiguration && (
+              <button
+                className="secondary-action"
+                onClick={clearUploadedConfiguration}
+              >
+                Clear Upload
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       {error && (
@@ -621,7 +841,7 @@ export default function Dashboard() {
               }
 
               configuration={
-                scenario.configuration
+                activeConfiguration
               }
             />
 
@@ -659,6 +879,8 @@ export default function Dashboard() {
           attackPaths={
             attackPaths
           }
+
+          simulation={simulation}
         />
 
         <RemediationPanel

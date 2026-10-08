@@ -17,6 +17,7 @@ from persona_engine import rank_paths_by_persona
 from what_if import simulate_remediation
 from alternate_paths import find_alternate_paths
 from security.api_routes import router as security_router
+from security.analyze_findings import analyze_findings
 from what_if import simulate_remediation_set
 
 
@@ -80,6 +81,10 @@ def analyze(
     # --------------------------------------------------------
     # BUILD SECURITY GRAPH
     # --------------------------------------------------------
+
+    findings_analysis = analyze_findings(
+        configuration=request.configuration
+    )
 
     graph = build_security_graph(
         request.configuration
@@ -235,7 +240,21 @@ def analyze(
             "CloudShield",
 
         "summary":
-            summary,
+            {
+                **summary,
+                "total_findings":
+                    findings_analysis["summary"]["total_findings"],
+                "critical_findings":
+                    findings_analysis["summary"]["critical_findings"],
+                "high_findings":
+                    findings_analysis["summary"]["high_findings"],
+            },
+
+        "findings":
+            findings_analysis["findings"],
+
+        "findings_summary":
+            findings_analysis["summary"],
 
         "attack_paths":
             results,
