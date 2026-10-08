@@ -240,6 +240,85 @@ export default function RiskPanel({
 
       </div>
 
+      {primaryAttackPath?.blast_radius && (
+        <div className="blast-radius-section">
+
+          <div className="blast-radius-header">
+            <div>
+              <span className="section-label">
+                IMPACT ANALYSIS
+              </span>
+
+              <h3>
+                Affected Resources
+              </h3>
+            </div>
+
+            <span className="blast-radius-count">
+              {primaryAttackPath.blast_radius.affected_resource_count || 0}
+            </span>
+          </div>
+
+          <p className="blast-radius-description">
+            Resources reachable if the attack path is compromised.
+          </p>
+
+          <div className="affected-resource-list">
+            {(
+              primaryAttackPath.blast_radius.affected_resources || []
+            ).map((resource) => {
+
+              const isCritical =
+                (
+                  primaryAttackPath.blast_radius.critical_resources || []
+                ).includes(resource);
+
+              return (
+                <div
+                  className={`affected-resource ${
+                    isCritical ? "critical-resource" : ""
+                  }`}
+                  key={resource}
+                >
+                  <span className="resource-status">
+                    {isCritical ? "!" : "•"}
+                  </span>
+
+                  <span>
+                    {resource}
+                  </span>
+
+                  {isCritical && (
+                    <small>
+                      CRITICAL
+                    </small>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="blast-radius-footer">
+            <span>
+              Critical resources
+            </span>
+
+            <strong>
+              {primaryAttackPath.blast_radius.critical_resource_count || 0}
+            </strong>
+          </div>
+
+        </div>
+      )}
+
+      <div className="simulation-note">
+        <span>i</span>
+        <p>
+          Blast radius is calculated from the current attack graph.
+          What-If remediation is simulated on a copy; no cloud resources are changed.
+        </p>
+      </div>
+
     </div>
   );
 }

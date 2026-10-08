@@ -2285,3 +2285,441 @@ body,
     border-left: none;
   }
 }
+/* =========================================================
+   CLOUDSHIELD — PRODUCT UI POLISH
+   ========================================================= */
+
+/* Cleaner overall visual language */
+:root {
+  --cs-bg: #080c13;
+  --cs-surface: #0d131d;
+  --cs-surface-2: #111923;
+  --cs-border: #202b3a;
+  --cs-border-soft: #182231;
+  --cs-text: #edf2f7;
+  --cs-muted: #8190a3;
+  --cs-blue: #5b9cff;
+  --cs-cyan: #55c2d9;
+  --cs-green: #55c98a;
+  --cs-amber: #e6ad55;
+  --cs-red: #e56b6f;
+}
+
+/* More restrained background */
+body {
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(61, 122, 196, 0.055),
+      transparent 30%
+    ),
+    #080c13;
+}
+
+/* Product-like cards instead of floating AI cards */
+.panel,
+.summary-card,
+.stat-card,
+.scenario-selector {
+  background: var(--cs-surface);
+  border-color: var(--cs-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Reduce excessive rounded/pill feeling */
+.panel {
+  border-radius: 12px;
+}
+
+.summary-card,
+.stat-card {
+  border-radius: 10px;
+}
+
+/* Better typography hierarchy */
+.eyebrow {
+  color: #718096;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.panel-header h2,
+.section-title h2 {
+  letter-spacing: -0.015em;
+}
+
+/* Summary cards */
+.summary-card strong,
+.stat-card strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subtle interaction */
+.summary-card,
+.stat-card,
+.panel {
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.summary-card:hover,
+.stat-card:hover {
+  border-color: #2b3b50;
+}
+
+/* =========================================================
+   SECURITY GRAPH
+   ========================================================= */
+
+.cloudshield-attack-graph {
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(46, 91, 135, 0.08),
+      transparent 48%
+    ),
+    #080d15 !important;
+
+  border-color: #202c3b !important;
+}
+
+/* Remove React Flow's white/default minimap completely */
+.react-flow__minimap {
+  display: none !important;
+}
+
+/* Replace white React Flow controls with CloudShield controls */
+.react-flow__controls {
+  overflow: hidden;
+  border: 1px solid #263447 !important;
+  border-radius: 8px !important;
+  background: #0d141e !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22) !important;
+}
+
+.react-flow__controls-button {
+  width: 30px !important;
+  height: 30px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #202d3d !important;
+  background: #0d141e !important;
+  color: #9eacbc !important;
+  fill: #9eacbc !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: 0 !important;
+}
+
+.react-flow__controls-button:hover {
+  background: #172231 !important;
+  color: #dce5ee !important;
+  fill: #dce5ee !important;
+}
+
+/* Graph background becomes subtle rather than dotted wallpaper */
+.react-flow__background {
+  background: #080d15 !important;
+}
+
+/* Better edge rendering */
+.react-flow__edge-path {
+  stroke-width: 1.8;
+}
+
+/* =========================================================
+   WHAT-IF / REMEDIATION
+   ========================================================= */
+
+.remediation-panel {
+  border-color: #263447;
+}
+
+/* Make simulation areas feel intentional */
+.simulate-button {
+  background: #3f7fd4 !important;
+  border-radius: 7px !important;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.simulate-button:hover {
+  background: #4c8fe8 !important;
+  transform: translateY(-1px);
+}
+
+/* Simulation result */
+.success-box {
+  background: rgba(44, 139, 91, 0.07);
+  border-color: #285f47;
+}
+
+/* =========================================================
+   STATUS COLORS — reserve red for actual danger
+   ========================================================= */
+
+.status-badge.safe {
+  color: var(--cs-green);
+  border-color: #24583f;
+  background: rgba(55, 170, 112, 0.08);
+}
+
+.status-badge.warning {
+  color: var(--cs-amber);
+  border-color: #66502b;
+  background: rgba(230, 173, 85, 0.07);
+}
+
+.status-badge.critical {
+  color: var(--cs-red);
+  border-color: #673338;
+  background: rgba(229, 107, 111, 0.07);
+}
+
+/* =========================================================
+   FILE UPLOAD
+   ========================================================= */
+
+input[type="file"] {
+  color: #9aa8b8;
+}
+
+input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 7px 11px;
+  border: 1px solid #2a394c;
+  border-radius: 6px;
+  background: #131c28;
+  color: #dce5ee;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: #192535;
+}
+
+/* =========================================================
+   SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .dashboard {
+    padding: 20px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-panel {
+    grid-row: auto;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+/* =========================================================
+   BLAST RADIUS / IMPACT ANALYSIS
+   ========================================================= */
+
+.blast-radius-section {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #202d3d;
+  border-radius: 10px;
+  background: #0b121b;
+}
+
+.blast-radius-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.blast-radius-header h3 {
+  margin: 4px 0 0;
+  color: #e8eef5;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.blast-radius-count {
+  min-width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #30445b;
+  border-radius: 8px;
+  background: #111b27;
+  color: #dce7f2;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.blast-radius-description {
+  margin: 9px 0 12px;
+  color: #718096;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.affected-resource-list {
+  display: grid;
+  gap: 6px;
+}
+
+.affected-resource {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 34px;
+  padding: 7px 9px;
+  border: 1px solid #1d2937;
+  border-radius: 7px;
+  background: #0e1621;
+  color: #b9c5d2;
+  font-size: 11px;
+}
+
+.resource-status {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #172231;
+  color: #718096;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.affected-resource.critical-resource {
+  border-color: #5b3035;
+  background: rgba(130, 42, 48, 0.08);
+  color: #e7b5b8;
+}
+
+.affected-resource.critical-resource .resource-status {
+  background: rgba(229, 107, 111, 0.14);
+  color: #e56b6f;
+}
+
+.affected-resource small {
+  margin-left: auto;
+  color: #e56b6f;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.blast-radius-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #1d2937;
+  color: #718096;
+  font-size: 10px;
+}
+
+.blast-radius-footer strong {
+  color: #e56b6f;
+}
+
+/* =========================================================
+   WHAT-IF SAFETY NOTE
+   ========================================================= */
+
+.simulation-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 12px;
+  padding: 10px 11px;
+  border: 1px solid #253446;
+  border-radius: 8px;
+  background: rgba(74, 125, 180, 0.055);
+}
+
+.simulation-note > span {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid #38516d;
+  border-radius: 50%;
+  color: #76a8d8;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.simulation-note p {
+  margin: 0;
+  color: #718096;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+/* =========================================================
+   WHAT-IF REMEDIATION PANEL
+   ========================================================= */
+
+.remediation-panel {
+  position: relative;
+}
+
+.remediation-panel::before {
+  content: "WHAT-IF SIMULATOR  ·  CONTROLLED COPY  ·  NO CLOUD CHANGES";
+  display: block;
+  margin-bottom: 14px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #1d2937;
+  color: #6f8ca9;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.simulation-result {
+  border-radius: 10px;
+}
+
+.simulation-result-header {
+  margin-bottom: 18px;
+}
+
+.before-after-card {
+  background: #0d151f !important;
+  border-color: #253446 !important;
+}
+
+.before-after-card strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.simulation-metrics {
+  border-top-color: #202d3d !important;
+}
+
+.verification-message {
+  border-radius: 8px !important;
+}
+
+/* Make simulation result feel like a verification step */
+.verification-message.success {
+  border-color: #285f47 !important;
+  background: rgba(44, 139, 91, 0.055) !important;
+}
+
+.verification-message.warning {
+  border-color: #66502b !important;
+  background: rgba(230, 173, 85, 0.055) !important;
+}
+
