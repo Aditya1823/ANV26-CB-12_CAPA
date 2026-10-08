@@ -678,9 +678,16 @@ export default function RemediationPanel({
 
               </div>
 
-              {optimizedRemediations
-                .slice(1, 4)
-                .map(
+              {[
+                ...optimizedRemediations
+                  .slice(1)
+                  .sort(
+                    (a, b) =>
+                      (a.action_count || 99) -
+                      (b.action_count || 99)
+                  )
+                  .slice(0, 3),
+              ].map(
                   (strategy, index) => (
 
                     <div

@@ -7,6 +7,7 @@ export default function RiskPanel({
   criticalAsset = "Unknown",
   blastRadius = 0,
   attackPaths = [],
+  simulation = null,
 }) {
   const normalizedSeverity =
     severity?.toUpperCase() || "UNKNOWN";
@@ -226,7 +227,9 @@ export default function RiskPanel({
           </span>
 
           <strong>
-            {attackPaths.length}
+            {simulation
+              ? simulation.remaining_paths?.length || 0
+              : attackPaths.length}
           </strong>
 
           <small>
