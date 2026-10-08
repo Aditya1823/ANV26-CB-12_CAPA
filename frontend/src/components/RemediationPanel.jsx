@@ -652,7 +652,7 @@ export default function RemediationPanel({
               >
                 {simulating
                   ? "SIMULATING..."
-                  : "SIMULATE BEST STRATEGY →"}
+                  : "RUN WHAT-IF SIMULATION →"}
               </button>
 
             </div>

@@ -9,6 +9,7 @@ export default function RiskPanel({
   attackPaths = [],
   simulation = null,
 }) {
+  const primaryAttackPath = attackPaths[0] || null;
   const normalizedSeverity =
     severity?.toUpperCase() || "UNKNOWN";
 

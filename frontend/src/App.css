@@ -2723,3 +2723,192 @@ input[type="file"]::file-selector-button:hover {
   background: rgba(230, 173, 85, 0.055) !important;
 }
 
+
+/* =========================================================
+   CLOUDSHIELD — SECURITY GRAPH POLISH
+   ========================================================= */
+
+.security-graph,
+.graph-container {
+  min-height: 390px;
+}
+
+/* React Flow canvas */
+.react-flow {
+  background: #080d16 !important;
+}
+
+/* Remove the default white React Flow controls */
+.react-flow__controls {
+  background: #0d1420 !important;
+  border: 1px solid #263244 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28) !important;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  width: 30px !important;
+  height: 30px !important;
+  background: #0d1420 !important;
+  border: 0 !important;
+  border-bottom: 1px solid #263244 !important;
+  color: #9aa8ba !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: 0 !important;
+}
+
+.react-flow__controls-button:hover {
+  background: #162131 !important;
+  color: #d7e2ef !important;
+}
+
+.react-flow__controls-button svg {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* If a minimap exists, make it blend into the product */
+.react-flow__minimap {
+  background: #0d1420 !important;
+  border: 1px solid #263244 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(8, 13, 22, 0.72) !important;
+}
+
+.react-flow__minimap-node {
+  fill: #334155 !important;
+  stroke: #64748b !important;
+}
+
+/* Make graph background subtle instead of decorative */
+.react-flow__background pattern circle {
+  fill: #263244 !important;
+  opacity: 0.45;
+}
+
+/* Cleaner graph edges */
+.react-flow__edge-path {
+  stroke-width: 1.5px;
+}
+
+.react-flow__edge-textbg {
+  fill: #0b111b !important;
+}
+
+.react-flow__edge-text {
+  fill: #8d9bad !important;
+  font-size: 9px;
+}
+
+/* Keep the graph visually centered */
+.react-flow__renderer {
+  background: transparent;
+}
+
+
+/* =========================================================
+   CLOUDSHIELD — SECURITY GRAPH POLISH
+   ========================================================= */
+
+.security-graph,
+.graph-container {
+  min-height: 390px;
+}
+
+/* React Flow canvas */
+.react-flow {
+  background: #080d16 !important;
+}
+
+/* Remove the default white React Flow controls */
+.react-flow__controls {
+  background: #0d1420 !important;
+  border: 1px solid #263244 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28) !important;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  width: 30px !important;
+  height: 30px !important;
+  background: #0d1420 !important;
+  border: 0 !important;
+  border-bottom: 1px solid #263244 !important;
+  color: #9aa8ba !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: 0 !important;
+}
+
+.react-flow__controls-button:hover {
+  background: #162131 !important;
+  color: #d7e2ef !important;
+}
+
+.react-flow__controls-button svg {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* If a minimap exists, make it blend into the product */
+.react-flow__minimap {
+  background: #0d1420 !important;
+  border: 1px solid #263244 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(8, 13, 22, 0.72) !important;
+}
+
+.react-flow__minimap-node {
+  fill: #334155 !important;
+  stroke: #64748b !important;
+}
+
+/* Make graph background subtle instead of decorative */
+.react-flow__background pattern circle {
+  fill: #263244 !important;
+  opacity: 0.45;
+}
+
+/* Cleaner graph edges */
+.react-flow__edge-path {
+  stroke-width: 1.5px;
+}
+
+.react-flow__edge-textbg {
+  fill: #0b111b !important;
+}
+
+.react-flow__edge-text {
+  fill: #8d9bad !important;
+  font-size: 9px;
+}
+
+/* Keep the graph visually centered */
+.react-flow__renderer {
+  background: transparent;
+}
+
+
+
+/* Final dashboard layout polish */
+.dashboard-grid {
+  align-items: start !important;
+}
+
+.graph-panel {
+  align-self: start !important;
+  height: fit-content !important;
+}
