@@ -40,11 +40,33 @@ def analyze_explicit_file(
     if extension in CONFIG_EXTENSIONS:
         try:
             text = content.decode("utf-8")
-            raw_data = (
-                json.loads(text)
-                if extension == ".json"
-                else yaml.safe_load(text)
-            )
+            if extension == ".json":
+                raw_data = json.loads(text)
+            else:
+                class CloudFormationLoader(yaml.SafeLoader):
+                    pass
+
+                def cloudformation_ref(loader, node):
+                    return {"Ref": loader.construct_scalar(node)}
+
+                def cloudformation_getatt(loader, node):
+                    value = loader.construct_scalar(node)
+                    return {"Fn::GetAtt": value.split(".", 1)}
+
+                CloudFormationLoader.add_constructor(
+                    "!Ref",
+                    cloudformation_ref,
+                )
+
+                CloudFormationLoader.add_constructor(
+                    "!GetAtt",
+                    cloudformation_getatt,
+                )
+
+                raw_data = yaml.load(
+                    text,
+                    Loader=CloudFormationLoader,
+                )
         except Exception as exc:
             raise ValueError(f"Invalid {extension} configuration: {exc}") from exc
 
