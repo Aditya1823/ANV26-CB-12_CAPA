@@ -2912,3 +2912,56 @@ input[type="file"]::file-selector-button:hover {
   align-self: start !important;
   height: fit-content !important;
 }
+
+/* CloudShield React Flow polish */
+.react-flow__minimap {
+  background: #0f172a !important;
+  border: 1px solid #263449 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28) !important;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(15, 23, 42, 0.72) !important;
+  stroke: #475569 !important;
+}
+
+.react-flow__minimap-node {
+  fill: #334155 !important;
+  stroke: #64748b !important;
+}
+
+.react-flow__controls {
+  background: #111827 !important;
+  border: 1px solid #263449 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+}
+
+.react-flow__controls-button {
+  width: 32px !important;
+  height: 32px !important;
+  background: #111827 !important;
+  border: 0 !important;
+  border-bottom: 1px solid #263449 !important;
+  fill: #94a3b8 !important;
+  color: #94a3b8 !important;
+}
+
+.react-flow__controls-button:hover {
+  background: #1e293b !important;
+  fill: #e2e8f0 !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: 0 !important;
+}
+
+.react-flow__attribution {
+  background: rgba(15, 23, 42, 0.75) !important;
+  color: #64748b !important;
+  border-radius: 4px !important;
+}
+
