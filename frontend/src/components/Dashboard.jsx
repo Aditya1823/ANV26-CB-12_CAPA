@@ -6,7 +6,7 @@ import RemediationPanel from "./RemediationPanel";
 import PersonaPanel from "./PersonaPanel";
 import FindingsPanel from "./FindingsPanel";
 
-const API_BASE = "http://127.0.0.1:8001";
+const API_BASE = "https://cloudshield-backend-7bm3.onrender.com";
 
 const scenarios = {
   singlePath: {
