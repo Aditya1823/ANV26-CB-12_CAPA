@@ -3,6 +3,32 @@ from pathlib import Path
 
 import yaml
 
+class CloudFormationLoader(yaml.SafeLoader):
+    pass
+
+def _cloudformation_tag(loader, tag_suffix, node):
+    if isinstance(node, yaml.ScalarNode):
+        value = loader.construct_scalar(node)
+    elif isinstance(node, yaml.SequenceNode):
+        value = loader.construct_sequence(node, deep=True)
+    else:
+        value = loader.construct_mapping(node, deep=True)
+
+    tag = tag_suffix
+
+    if tag == "Ref":
+        return {"Ref": value}
+
+    if tag == "GetAtt":
+        if isinstance(value, str):
+            value = value.split(".", 1)
+        return {"Fn::GetAtt": value}
+
+    return {"Fn::" + tag: value}
+
+CloudFormationLoader.add_multi_constructor("!", _cloudformation_tag)
+yaml.SafeLoader.add_multi_constructor("!", _cloudformation_tag)
+
 from models import CloudConfiguration
 
 
@@ -32,7 +58,7 @@ def load_configuration(file_name: str, content: bytes) -> CloudConfiguration:
         if extension == ".json":
             data = json.loads(text)
         else:
-            data = yaml.safe_load(text)
+            data = yaml.load(text, Loader=CloudFormationLoader)
     except (json.JSONDecodeError, yaml.YAMLError) as exc:
         raise ValueError(f"Invalid {extension} configuration: {exc}") from exc
 

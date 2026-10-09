@@ -691,10 +691,10 @@ export default function Dashboard() {
                 alignItems: "center",
               }}
             >
-              Choose JSON/YAML
+              Choose Config File
               <input
                 type="file"
-                accept=".json,.yaml,.yml"
+                accept=".json,.yaml,.yml,.env,.ini,.cfg,.conf,.properties,.toml,.txt"
                 onChange={handleFileUpload}
                 style={{ display: "none" }}
               />

@@ -77,6 +77,12 @@ def _resource_metadata(logical_id: str, resource: Dict[str, Any]) -> Dict[str, A
     resource_type = resource.get("Type", "")
     properties = resource.get("Properties", {}) or {}
 
+    # Some generated CloudFormation templates may use an intrinsic
+    # function where a resource type string is expected. Normalize it
+    # safely instead of crashing the entire analysis.
+    if not isinstance(resource_type, str):
+        resource_type = "UNKNOWN"
+
     metadata = {
         "id": logical_id,
         "type": resource_type,
