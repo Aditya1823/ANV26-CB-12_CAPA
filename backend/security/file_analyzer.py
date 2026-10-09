@@ -15,6 +15,12 @@ SUPPORTED_TEXT_EXTENSIONS = {
     ".properties",
     ".toml",
     ".txt",
+    ".html",
+    ".htm",
+    ".js",
+    ".jsx",
+    ".ts",
+    ".tsx",
 }
 
 

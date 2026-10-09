@@ -50,8 +50,13 @@ def analyze_explicit_file(
                     return {"Ref": loader.construct_scalar(node)}
 
                 def cloudformation_getatt(loader, node):
-                    value = loader.construct_scalar(node)
-                    return {"Fn::GetAtt": value.split(".", 1)}
+                    if isinstance(node, yaml.SequenceNode):
+                        value = loader.construct_sequence(node)
+                    else:
+                        value = loader.construct_scalar(node).split(".", 1)
+                    if not isinstance(value, list) or len(value) != 2:
+                        raise ValueError("!GetAtt must specify a resource and attribute")
+                    return {"Fn::GetAtt": value}
 
                 CloudFormationLoader.add_constructor(
                     "!Ref",

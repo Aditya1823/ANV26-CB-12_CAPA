@@ -6,7 +6,7 @@ import RemediationPanel from "./RemediationPanel";
 import PersonaPanel from "./PersonaPanel";
 import FindingsPanel from "./FindingsPanel";
 
-const API_BASE = "https://cloudshield-backend-7bm3.onrender.com";
+const API_BASE = "http://127.0.0.1:8001";
 
 const scenarios = {
   singlePath: {
@@ -258,9 +258,28 @@ export default function Dashboard() {
       const data = await response.json();
 
       if (!data.configuration) {
-        throw new Error(
-          "Uploaded file is not a valid CloudShield configuration"
-        );
+        setUploadedConfiguration(null);
+        setUploadedFileName(file.name);
+        setSimulation(null);
+        setSelectedRemediation(null);
+        setAnalysis({
+          ...data,
+          analysis_type: data.analysis_type || "EXPLICIT_FILE_ANALYSIS",
+          findings: data.findings || [],
+          findings_summary:
+            data.findings_summary || data.summary || {},
+          attack_paths: [],
+          optimized_remediations: [],
+          persona_rankings: {},
+          summary: {
+            total_resources: 0,
+            critical_assets: 0,
+            dangerous_paths: 0,
+            highest_risk: 0,
+            ...(data.summary || {}),
+          },
+        });
+        return;
       }
 
       setUploadedConfiguration(data.configuration);
@@ -661,7 +680,7 @@ export default function Dashboard() {
                 opacity: 0.7,
               }}
             >
-              Upload a JSON or YAML configuration for full CloudShield analysis.
+              Upload a JSON/YAML cloud configuration for attack-path analysis, or a supported text file to scan for exposed secrets.
             </p>
 
             {uploadedFileName && (
@@ -691,10 +710,10 @@ export default function Dashboard() {
                 alignItems: "center",
               }}
             >
-              Choose Config File
+              Choose File
               <input
                 type="file"
-                accept=".json,.yaml,.yml,.env,.ini,.cfg,.conf,.properties,.toml,.txt"
+                accept=".json,.yaml,.yml,.env,.ini,.cfg,.conf,.properties,.toml,.txt,.html,.htm,.js,.jsx,.ts,.tsx"
                 onChange={handleFileUpload}
                 style={{ display: "none" }}
               />
@@ -718,7 +737,22 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="summary-grid">
+      {analysis?.analysis_type === "EXPLICIT_FILE_ANALYSIS" && (
+        <FindingsPanel
+          findings={analysis.findings || []}
+          summary={analysis.findings_summary || {}}
+        />
+      )}
+
+      <div
+        className="summary-grid"
+        style={{
+          display:
+            analysis?.analysis_type === "EXPLICIT_FILE_ANALYSIS"
+              ? "none"
+              : "grid",
+        }}
+      >
 
         <div className="summary-card">
 
@@ -770,7 +804,15 @@ export default function Dashboard() {
 
       </div>
 
-      <div className="dashboard-grid">
+      <div
+        className="dashboard-grid"
+        style={{
+          display:
+            analysis?.analysis_type === "EXPLICIT_FILE_ANALYSIS"
+              ? "none"
+              : "grid",
+        }}
+      >
 
         <div className="panel graph-panel">
 
@@ -920,6 +962,10 @@ export default function Dashboard() {
       <div
         style={{
           marginTop: "24px",
+          display:
+            analysis?.analysis_type === "EXPLICIT_FILE_ANALYSIS"
+              ? "none"
+              : "block",
         }}
       >
 
